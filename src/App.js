@@ -1,6 +1,7 @@
 import kaboom from "kaboom";
 import * as React from "react";
 
+const jump = () => {};
 const Game = () => {
   const canvasRef = React.useRef(null);
   // just make sure this is only run once on mount so your game state is not messed up
@@ -79,9 +80,6 @@ const Game = () => {
         };
         const gameLevel = k.addLevel(map, mapkeys);
 
-        // const level = addLevel(LEVELS[levelId ?? 0], levelConf);
-        // const coinsLabel = add([text(coins),k.pos(24, 24), fixed()]);
-
         const mario = k.add([
           k.sprite("mario"), // renders as ak.sprite
           k.pos(50, 80), //k.position in world
@@ -90,7 +88,7 @@ const Game = () => {
           k.origin("bot"),
         ]);
 
-        k.onKeyPress(["space", "up"], () => {
+        k.onKeyPress(["space", "up", "w"], () => {
           if (mario.isGrounded()) {
             mario.jump();
             k.play("jumpSound");
@@ -163,14 +161,14 @@ const Game = () => {
 
     k.scene("lose", () => {
       // music.pause();
-      dict1["coins"] = 0;
-      k.add([k.pos(160, 160), k.text("You Lose!")]);
+      k.add([k.pos(160, 160), k.text(`You Lose!\n score: ${dict1["coins"]}`)]);
       k.onKeyPress(() => k.go("game"));
+      dict1["coins"] = 0;
     });
 
     k.scene("win", () => {
       // music.pause();
-      k.add([k.pos(160, 160), k.text("You Win!")]);
+      k.add([k.pos(160, 160), k.text(`You Win!\n score: ${dict1["coins"]}`)]);
       k.onKeyPress(() => k.go("game"));
     });
 
@@ -284,7 +282,7 @@ const Game = () => {
           }
         });
 
-        k.onKeyPress(["space", "up"], () => {
+        k.onKeyPress(["space", "up", "w"], () => {
           if (mario.isGrounded()) {
             mario.jump();
             k.play("jumpSound");
