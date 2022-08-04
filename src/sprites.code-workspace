@@ -1,0 +1,13 @@
+{
+  "folders": [
+    {
+      "name": "sprites",
+      "path": "public/sprites"
+    },
+    {
+      "name": "react-kaboom",
+      "path": ".."
+    }
+  ],
+  "settings": {}
+}
