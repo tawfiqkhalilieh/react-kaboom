@@ -12,6 +12,7 @@ const Game = () => {
       scale: 2,
       font: "apl386",
     });
+
     k.play("gameSound");
     k.loadRoot("./sprites/");
     k.loadSprite("block", "block.png");
@@ -33,6 +34,7 @@ const Game = () => {
     let frms2 = 0;
     let mvs = 0;
     const MOVE_SPEED = 300;
+    let _ = true;
     // const FALL_DEATH = 2400;
 
     const dict1 = {
@@ -130,6 +132,10 @@ const Game = () => {
             color: k.rgb(0, 0, 255),
           });
           k.camPos(k.vec2(mario.pos.x + 450, mario.pos.y));
+          if (_) {
+            k.fullscreen(!k.fullscreen());
+            _ = false;
+          }
         });
 
         mario.onHeadbutt((obj) => {
