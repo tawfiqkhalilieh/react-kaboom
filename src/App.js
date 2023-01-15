@@ -1,7 +1,6 @@
 import kaboom from "kaboom";
 import * as React from "react";
 
-const jump = () => {};
 const Game = () => {
   const canvasRef = React.useRef(null);
   // just make sure this is only run once on mount so your game state is not messed up
@@ -13,7 +12,8 @@ const Game = () => {
       scale: 2,
       font: "apl386",
     });
-    const music = k.play("gameSound");
+
+    k.play("gameSound");
     k.loadRoot("./sprites/");
     k.loadSprite("block", "block.png");
     k.loadSprite("trap_block", "block.png");
@@ -29,11 +29,12 @@ const Game = () => {
     k.loadSprite("princes", "princes.png");
     k.loadSound("jumpSound", "jumpSound.mp3");
     k.loadSound("gameSound", "gameSound.mp3");
-
+    k.loadSprite("cloud", "cloud.png");
     let frms = 0;
     let frms2 = 0;
     let mvs = 0;
     const MOVE_SPEED = 300;
+    let _ = true;
     // const FALL_DEATH = 2400;
 
     const dict1 = {
@@ -47,7 +48,7 @@ const Game = () => {
         k.gravity(3200);
         // let music = k.play("gameSound");
         const map = [
-          "                                                    ",
+          "",
           "                                                    ",
           "                                                    ",
           "                                                    ",
@@ -55,9 +56,9 @@ const Game = () => {
           "                                  ===?   p          ",
           "  @      ? =                            ====        ",
           "                      x                        x    ",
-          "                   ======    x                 =====",
-          "                 x           e=                     ",
-          "=====     x   ====           t     =========        ",
+          "                   ======    x x               =====",
+          "                 x           e=e                    ",
+          "=====     x   ====           # #   =========        ",
           "        ====                                        ",
           "                                                    ",
           "                                                    ",
@@ -77,6 +78,8 @@ const Game = () => {
           u: () => [k.sprite("pipe_up"), k.area(), k.solid(), "pip_up_top"],
           e: () => [k.sprite("evil_mushroom"), k.area(), "evil_mushroom"],
           t: () => [k.sprite("trap_block"), k.area(), k.solid(), "trap_block"],
+          "#": () => [k.sprite("mario2"), k.area(), k.solid(), "mario2"],
+          c: () => [k.sprite("cloud"), k.area(), "cloud"],
         };
         const gameLevel = k.addLevel(map, mapkeys);
 
@@ -109,12 +112,11 @@ const Game = () => {
           mario.weight = 1;
         });
 
-        k.onKeyPress("f", () => {
+        k.onKeyPress(["f", "ف"], () => {
           k.fullscreen(!k.fullscreen());
         });
 
         k.action(() => {
-          // k.add([k.pos(mario.pos.x, 60), k.text(dict1["coins"])]);
           if (mario.pos.y > 400) {
             k.go("lose");
           }
@@ -130,6 +132,10 @@ const Game = () => {
             color: k.rgb(0, 0, 255),
           });
           k.camPos(k.vec2(mario.pos.x + 450, mario.pos.y));
+          if (_) {
+            k.fullscreen(!k.fullscreen());
+            _ = false;
+          }
         });
 
         mario.onHeadbutt((obj) => {
@@ -154,7 +160,7 @@ const Game = () => {
 
         mario.onCollide("evil_mushroom", (evil_mushroom) => {
           k.shake(60);
-          k.destroyAll("trap_block");
+          k.destroyAll("mario2");
         });
       }
     );
@@ -315,6 +321,14 @@ const Game = () => {
         });
 
         mario.onUpdate(() => {
+          k.drawText({
+            text: dict1["coins"],
+            size: 48,
+            font: "sink",
+            width: 120,
+            pos: k.vec2(mario.pos.x + 100 / 10, 10),
+            color: k.rgb(0, 0, 255),
+          });
           k.camPos(k.vec2(mario.pos.x + 450, mario.pos.y));
         });
 
